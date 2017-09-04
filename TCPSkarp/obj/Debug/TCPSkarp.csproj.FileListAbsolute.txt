@@ -1,0 +1,6 @@
+/Users/emilrasmussen/RiderProjects/TCPSkarp/TCPSkarp/bin/Debug/TCPSkarp.exe
+/Users/emilrasmussen/RiderProjects/TCPSkarp/TCPSkarp/bin/Debug/TCPSkarp.pdb
+/Users/emilrasmussen/RiderProjects/TCPSkarp/TCPSkarp/obj/Debug/TCPSkarp.csprojResolveAssemblyReference.cache
+/Users/emilrasmussen/RiderProjects/TCPSkarp/TCPSkarp/obj/Debug/TCPSkarp.csproj.CoreCompileInputs.cache
+/Users/emilrasmussen/RiderProjects/TCPSkarp/TCPSkarp/obj/Debug/TCPSkarp.exe
+/Users/emilrasmussen/RiderProjects/TCPSkarp/TCPSkarp/obj/Debug/TCPSkarp.pdb
