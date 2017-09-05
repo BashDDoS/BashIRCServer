@@ -8,6 +8,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using System.Text;
+using System.Xml.Schema;
 
 namespace TCPSkarp
 {
@@ -20,7 +21,7 @@ namespace TCPSkarp
             {
                 // Set the TcpListener on port 845.
                 Int32 port = 845;
-                IPAddress localAddr = IPAddress.Parse("169.254.247.82");
+                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
                 // TcpListener server = new TcpListener(port);
                 server = new TcpListener(localAddr, port);
@@ -60,11 +61,12 @@ namespace TCPSkarp
                         // Response for all data
                         if (data.FirstOrDefault().ToString() == "!")
                         {
+                            string[] cmdData = data.Split(' ');
                             // Handle commands
                             switch (data)
                             {
                                 case "!TestCommand":
-                                    if (!Commands.TestCommand())
+                                    if (!Commands.TestCommand(cmdData))
                                         Console.WriteLine("Command error: " + data);
                                     break;
                                 default:
@@ -104,7 +106,7 @@ namespace TCPSkarp
 
     public static class Commands
     {
-        public static bool TestCommand()
+        public static bool TestCommand(string[] cmdData)
         {
             Console.WriteLine("Test Command received!");
             return true;
