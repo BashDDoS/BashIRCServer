@@ -35,49 +35,42 @@ namespace TCPSkarp
                     // Perform a blocking call to accept requests.
                     // You could also user server.AcceptSocket() here.
                     TcpClient client = server.AcceptTcpClient();
-                    
-                    Console.WriteLine("Client with IP: " + client.Client.RemoteEndPoint);
+
+
 
                     data = null;
 
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
-                    
-                    int i;
 
+
+
+                    int i;
+                    int j = 0;
                     // Loop to receive all the data sent by the client.
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
+                        j++;
                         // Translate data bytes to a UTF8 string.
-                        data = Encoding.UTF8.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-                        
-                        // Response for all data
-                        if (data.FirstOrDefault().ToString() == "!")
-                        {
-                            string[] cmdData = data.Split(' ');
-                            // Handle commands
-                            switch (data)
-                            {
-                                case "!TestCommand":
-                                    if (!Commands.TestCommand(cmdData))
-                                        Console.WriteLine("Command error: " + data);
-                                    break;
-                                default:
-                                    // Should log attempt and IP
-                                    break;
-                            }
-                        }
-                        
-                        byte[] msg = Encoding.UTF8.GetBytes(data);
-                        
+                        data = System.Text.Encoding.UTF8.GetString(bytes, 0, i);
+
+                        Console.WriteLine("Received: {0} from {1}", data, client.Client.LocalEndPoint);
+                        Package recievedPack = PackageManagement.PackageParser(data);
+
+                        PackageManagement.HandlePackage(recievedPack);
+
+                        data = data.ToUpper();
+                        byte[] msg = System.Text.Encoding.UTF8.GetBytes(data);
+
                         // Send back a response.
                         stream.Write(msg, 0, msg.Length);
-                        Console.WriteLine("Sent: {0}", data);
 
-                        i = stream.Read(bytes, 0, bytes.Length);
+
                     }
-
+                    if (j == 0)
+                    {
+                        Console.WriteLine("pinged by " + client.Client.RemoteEndPoint);
+                    }
                     // Shutdown and end connection
                     client.Close();
                 }
@@ -100,11 +93,81 @@ namespace TCPSkarp
 
     public static class Commands
     {
-        public static bool TestCommand(string[] cmdData)
+        public static void RunCommand(string cmd)
+        {
+            TestCommand();
+        }
+
+        public static bool TestCommand()
         {
             Console.WriteLine("Test Command received!");
             return true;
         }
+    }
+
+    public static class Authentication{
+        public static void Authenticate(string data)
+        {
+            Console.Write("Should authenticate!");
+        }
+    }
+
+    public static class PackageManagement
+    {
+        public static Package PackageParser(string pkg)
+        {
+            Package returnPack;
+
+            string data = pkg.Substring(4, pkg.Length - 4);
+            switch (pkg.Substring(0, 3).ToLower())
+            {
+                case "msg": returnPack = new Package(CmdType.message, data); break;
+                case "cmd": returnPack = new Package(CmdType.command, data); break;
+                case "aut": returnPack = new Package(CmdType.authentication, data); break;
+                default: returnPack = new Package(CmdType.error, ""); break;
+            }
+            return returnPack;
+        }
+
+        public static void HandlePackage(Package pack)
+        {
+            switch (pack.type)
+            {
+                case CmdType.message: MessageManager.HandleMessage(pack.data); break;
+                case CmdType.command: Commands.RunCommand(pack.data); break;
+                case CmdType.authentication: Authentication.Authenticate(pack.data); break;
+                case CmdType.error: Console.Write("ERROR IN PACK"); break;
+            }
+        }
+    }
+
+    public static class MessageManager
+    {
+        public static void HandleMessage(string msg)
+        {
+
+        }
+    }
+
+    public struct Package
+    {
+        public CmdType type;
+        public string data;
+
+        public Package(CmdType _type, string _data)
+        {
+            type = _type;
+            data = _data;
+        }
+    }
+
+    public enum CmdType
+    {
+        message,
+        command,
+        authentication,
+        error,
+        ping
     }
 
     public class User
