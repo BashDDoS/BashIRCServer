@@ -21,7 +21,7 @@ namespace TCPSkarp
             {
                 // Set the TcpListener on port 845.
                 Int32 port = 845;
-                IPAddress localAddr = IPAddress.Parse("169.254.247.82");
+                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
 
                 // TcpListener server = new TcpListener(port);
                 server = new TcpListener(localAddr, port);
