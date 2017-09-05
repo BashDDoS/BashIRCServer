@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Data.Common;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
 using System.Text;
-using System.Xml.Schema;
 
 namespace TCPSkarp
 {
