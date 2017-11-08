@@ -38,8 +38,11 @@ namespace TCPSkarp
                     
                     Console.WriteLine("Client with IP: " + client.Client.RemoteEndPoint);
 
+<<<<<<< Updated upstream
                     data = null;
 
+=======
+>>>>>>> Stashed changes
                     // Get a stream object for reading and writing
                     NetworkStream stream = client.GetStream();
                     
@@ -49,7 +52,7 @@ namespace TCPSkarp
                     while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
                         // Translate data bytes to a UTF8 string.
-                        data = Encoding.UTF8.GetString(bytes, 0, i);
+                        var data = Encoding.UTF8.GetString(bytes, 0, i);
                         Console.WriteLine("Received: {0}", data);
                         
                         // Response for all data
@@ -90,7 +93,7 @@ namespace TCPSkarp
             {
                 // Stop listening for new clients.
                 Console.WriteLine("Stopping server...");
-                server.Stop();
+                server?.Stop();
             }
 
             Console.WriteLine("\nHit enter to continue...");
@@ -100,6 +103,20 @@ namespace TCPSkarp
 
     public static class Commands
     {
+<<<<<<< Updated upstream
+=======
+        private static string _message;
+        private static string[] _cmdData;
+        private static int _timeStamp = 0;
+
+        public Commands(string messageVal, string[] cmdDataVal)
+        {
+            _message = messageVal;
+            _cmdData = cmdDataVal;
+            _timeStamp = (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+        }
+        
+>>>>>>> Stashed changes
         public static bool TestCommand(string[] cmdData)
         {
             Console.WriteLine("Test Command received!");
@@ -121,6 +138,11 @@ namespace TCPSkarp
             _username = usernameVal;
             _password = passwordVal;
             _ip = ipVal;
+<<<<<<< Updated upstream
+=======
+            
+            // Set last seen to now
+>>>>>>> Stashed changes
             _lastSeen = (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
@@ -138,7 +160,12 @@ namespace TCPSkarp
 
         public bool IsSessionActive(string ipVal)
         {
+<<<<<<< Updated upstream
             return this._lastSeen + 1800 > (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds && this.IsValid();
+=======
+            // If the sessions is seen in the last 30 min and it is valid
+            return _lastSeen + 1800 > (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds && IsValid();
+>>>>>>> Stashed changes
         }
     }
 }
